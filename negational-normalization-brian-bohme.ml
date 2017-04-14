@@ -113,12 +113,15 @@ in visit e_init [];;
 
 (* Generates a random boolean expression with variables "0", "1", "2"... "9" *)
 
-let rec random_boolean_expression_generator () =
-    match Random.int 6 with 
-    | 0 -> Negation (random_boolean_expression_generator ())
-    | 1 -> Conjunction (random_boolean_expression_generator (), random_boolean_expression_generator ())
-    | 2 -> Disjunction (random_boolean_expression_generator (), random_boolean_expression_generator ())
-    | _ -> Variable (string_of_int (Random.int 10));;
+let random_boolean_expression_generator () =
+  let rec visit n = 
+    if n = 50 then Variable (string_of_int (Random.int 10)) else
+    match Random.int 6 with
+    | 0 -> Negation (visit (n+1))
+    | 1 -> Conjunction (visit (n+1), visit (n+1))
+    | 2 -> Disjunction (visit (n+1), visit (n+1))
+    | _ -> Variable (string_of_int (Random.int 10))
+  in visit 0;;
 
 
 (* Part 1 *)  
